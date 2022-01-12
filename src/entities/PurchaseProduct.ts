@@ -1,20 +1,20 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import Cart from './Cart';
 import Product from './Product';
+import Purchase from './Purchases';
 
-@Entity('cart_products')
-class CartProduct {
+@Entity('purchase_products')
+class PurchaseProduct {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @ManyToOne(() => Cart)
-    cart: Cart;
+    @ManyToOne(() => Purchase)
+    purchases: Purchase;
 
     @ManyToOne(() => Product)
     product: Product;
 
     @Column()
-    cartId: string;
+    purchaseId: string;
 
     @Column()
     productId: string
@@ -29,4 +29,4 @@ class CartProduct {
     updated_at: Date;
 };
 
-export default CartProduct;
+export default PurchaseProduct;

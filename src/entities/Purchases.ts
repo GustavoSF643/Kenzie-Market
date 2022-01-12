@@ -1,14 +1,14 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
-import CartProduct from './CartProduct';
+import PurchaseProduct from './PurchaseProduct';
 import User from './User';
 
-@Entity('carts')
-class Cart {
+@Entity('purchases')
+class Purchase {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @OneToMany(() => CartProduct, (cartProduct) => cartProduct.product)
-    products: CartProduct[];
+    @OneToMany(() => PurchaseProduct, (purchaseProduct) => purchaseProduct.product)
+    products: PurchaseProduct[];
 
     @ManyToOne(() => User)
     user: User;
@@ -23,4 +23,4 @@ class Cart {
     updated_at: Date;
 };
 
-export default Cart;
+export default Purchase;
