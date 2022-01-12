@@ -4,6 +4,7 @@ import UserRepository from "../repositories/UserRepository";
 import { Response, Request } from "express";
 
 import CreateUserService from "../services/User/CreateUserService";
+import AppError from "../errors/AppError";
 
 export const create = async (request: Request, response: Response) => {
     const { name, email, password, isAdm } = request.body;
@@ -29,12 +30,22 @@ export const list = async (request: Request, response: Response) => {
 };
 
 export const retrieve = async (request: Request, response: Response) => {
+    const { id } = request.params;
+
     const userRepository = getCustomRepository(UserRepository);
     const user = await userRepository.findOne({
         where: {
             id: request.user.id,
         }
     });
+
+    if (!user) {
+        throw new AppError("Not found any user with this id");
+    };
+
+    if (!user.isAdm && id !== request.user.id) {
+        throw new AppError("Unauthorized", 401);
+    };
 
     return response.json(classToClass(user));
 };
