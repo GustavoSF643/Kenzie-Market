@@ -1,9 +1,11 @@
 import { Router } from "express";
+import { create, list, retrieve } from "../controllers/ProductController";
+import { admAuth } from "../middlewares/authentication/AdmAuth";
 
 const productRoutes = Router();
 
-productRoutes.post("/"); // apenas adm pode cadastrar um produto
-productRoutes.get("/:id"); // qualquer user pode acessar um produto pelo id
-productRoutes.get("/"); // qualquer user pode listar os produtos cadastrados
+productRoutes.post("/", admAuth, create);
+productRoutes.get("/:id", retrieve);
+productRoutes.get("/", list); 
 
 export default productRoutes;
