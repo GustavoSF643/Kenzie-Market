@@ -12,5 +12,7 @@ routes.use("/login", sessionRouter);
 routes.use("/product", productRoutes);
 routes.use("/cart", cartRoutes);
 routes.use("/buy", purchasesRoutes);
+// routes.use("/email");
+// routes.use("/recuperar");
 
 export default routes;
