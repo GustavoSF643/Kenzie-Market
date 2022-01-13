@@ -33,17 +33,19 @@ export const retrieve = async (request: Request, response: Response) => {
     const { id } = request.params;
 
     const userRepository = getCustomRepository(UserRepository);
-    const user = await userRepository.findOne({
+    const myUser = await userRepository.findOne({
         where: {
             id: request.user.id,
         }
     });
 
-    if (!user) {
-        throw new AppError("Not found any user with this id");
-    };
+    const user = await userRepository.findOne({
+        where: {
+            id: id,
+        }
+    })
 
-    if (!user.isAdm && id !== request.user.id) {
+    if (!myUser || !myUser.isAdm && id !== request.user.id) {
         throw new AppError("Unauthorized", 401);
     };
 

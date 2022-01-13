@@ -34,7 +34,7 @@ export const admAuth = async (request: Request, response: Response, next: NextFu
         });
 
         if (!user) {
-            throw new AppError("Not found any user with this id");
+            throw new AppError("JWT Expired or sended in a wrong way");
         }
 
         if (!user.isAdm) {
@@ -47,6 +47,11 @@ export const admAuth = async (request: Request, response: Response, next: NextFu
     
         return next();
     } catch (err) {
-        throw new AppError("JWT Expired or sended in a wrong way");
+        if (err instanceof AppError) {
+            throw new AppError(err.message, err.statusCode)
+        };
+        console.error(err)
+
+        throw new AppError("Internal Error", 500);
     };
 };
