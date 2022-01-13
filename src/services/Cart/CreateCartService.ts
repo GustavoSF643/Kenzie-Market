@@ -10,7 +10,9 @@ export default class CreateCartService {
         const cartRepository = getRepository(Cart);
 
         const cart = cartRepository.create({
-           userId
+            user: {
+                id: userId,
+            }
         });
         
         await cartRepository.save(cart);

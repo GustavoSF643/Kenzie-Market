@@ -38,8 +38,12 @@ export default class AddProductOnCartService {
         const cartProductRepository = getRepository(CartProduct);
 
         const cartProduct = await cartProductRepository.create({
-            cartId: cart.id,
-            productId,
+            cart: {
+                id: cart.id
+            },
+            product: {
+                id: productId
+            },
         })
 
         await cartProductRepository.save(cartProduct);
