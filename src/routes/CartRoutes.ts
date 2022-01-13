@@ -1,10 +1,13 @@
 import { Router } from "express";
+import { create, destroy, list, retrieve } from "../controllers/CartController";
+import { admAuth } from "../middlewares/authentication/AdmAuth";
+import userAuth from "../middlewares/authentication/userAuth";
 
 const cartRoutes = Router();
 
-cartRoutes.post("/"); // apenas usuário logado pode adicionar produto ao carrinho
-cartRoutes.get("/:id"); // user pode acessar apenas seu próprio cart, adm pode acessar todos
-cartRoutes.get("/"); // apenas adm pode listar todos os carrinhos.
-cartRoutes.delete("/:product_id") // apenas o dono do carrinho ou adm pode remover item do carrinho
+cartRoutes.post("/", userAuth, create);
+cartRoutes.get("/:id", userAuth, retrieve);
+cartRoutes.get("/", admAuth, list);
+cartRoutes.delete("/:product_id", userAuth, destroy)
 
 export default cartRoutes;

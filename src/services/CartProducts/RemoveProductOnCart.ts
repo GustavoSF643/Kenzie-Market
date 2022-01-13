@@ -9,7 +9,7 @@ interface Request {
     productId: string;
 };
 
-export default class AddProductOnCartService {
+export default class RemoveProductOnCartService {
     public async execute({ userId, productId }: Request): Promise<DeleteResult> {
         const cartRepository = getRepository(Cart);
 
