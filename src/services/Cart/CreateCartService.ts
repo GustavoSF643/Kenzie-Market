@@ -12,7 +12,7 @@ export default class CreateCartService {
         const cart = cartRepository.create({
            userId
         });
-
+        
         await cartRepository.save(cart);
 
         return cart;
