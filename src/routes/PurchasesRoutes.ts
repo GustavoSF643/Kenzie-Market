@@ -1,9 +1,12 @@
 import { Router } from "express";
+import { create, list, retrieve } from "../controllers/PurchasesController";
+import { admAuth } from "../middlewares/authentication/AdmAuth";
+import userAuth from "../middlewares/authentication/userAuth";
 
 const purchasesRoutes = Router();
 
-purchasesRoutes.post("/"); // apenas dono do carrinho pode finalizar compra, email com os dados da compra deve ser disparado para o usuário.
-purchasesRoutes.get("/:id"); // apenas dono do carrinho e adm podem selecionar uma compra
-purchasesRoutes.get("/"); // apenas adm pode listar todas as compras
+purchasesRoutes.post("/", userAuth, create); // email com os dados da compra deve ser disparado para o usuário.
+purchasesRoutes.get("/:id", userAuth, retrieve);
+purchasesRoutes.get("/", admAuth, list);
 
 export default purchasesRoutes;

@@ -1,16 +1,16 @@
 import { getRepository } from "typeorm";
 import Cart from "../../entities/Cart";
-import Product from "../../entities/Product";
 import PurchaseProduct from "../../entities/PurchaseProduct";
 import Purchase from "../../entities/Purchases";
 import AppError from "../../errors/AppError";
 
 interface Request {
     userId: string;
+    purchaseId: string;
 };
 
 export default class AddProductsOnPurchasesService {
-    public async execute({ userId }: Request): Promise<Purchase> {
+    public async execute({ userId, purchaseId }: Request): Promise<Purchase> {
         const purchaseRepository = getRepository(Purchase);
         const cartRepository = getRepository(Cart);
 
@@ -26,7 +26,7 @@ export default class AddProductsOnPurchasesService {
 
         const purchase = await purchaseRepository.findOne({
             where: {
-                userId,
+                id: purchaseId,
             }
         });
 
@@ -48,6 +48,8 @@ export default class AddProductsOnPurchasesService {
 
             await purchaseProductRepository.save(purchaseProduct);
         });
+
+        cartRepository.delete(cart.id);
 
         return purchase;
     };

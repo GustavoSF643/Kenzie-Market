@@ -3,7 +3,7 @@ import { Response, Request } from "express";
 
 import Cart from "../entities/Cart";
 import CreateCartService from "../services/Cart/CreateCartService";
-import AddProductOnCartService from "../services/CartProducts/AddProductOnCart";
+import AddProductOnCartService from "../services/CartProducts/AddProductOnCartService";
 import AppError from "../errors/AppError";
 import UserRepository from "../repositories/UserRepository";
 import RemoveProductOnCartService from "../services/CartProducts/RemoveProductOnCart";
