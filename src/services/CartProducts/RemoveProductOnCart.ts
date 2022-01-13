@@ -27,7 +27,7 @@ export default class RemoveProductOnCartService {
 
         const product = await productRepository.findOne({
             where: {
-                productId
+                id: productId
             }
         });
 
