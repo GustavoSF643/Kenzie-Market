@@ -8,7 +8,7 @@ class PurchaseProduct {
     id: string;
 
     @ManyToOne(() => Purchase)
-    purchases: Purchase;
+    purchase: Purchase;
 
     @ManyToOne(() => Product)
     product: Product;

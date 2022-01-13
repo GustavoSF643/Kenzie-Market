@@ -7,7 +7,7 @@ class Purchase {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @OneToMany(() => PurchaseProduct, (purchaseProduct) => purchaseProduct.product)
+    @OneToMany(() => PurchaseProduct, (purchaseProduct) => purchaseProduct.purchase, {eager: true})
     products: PurchaseProduct[];
 
     @ManyToOne(() => User)
