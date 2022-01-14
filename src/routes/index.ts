@@ -14,5 +14,6 @@ routes.use("/cart", cartRoutes);
 routes.use("/buy", purchasesRoutes);
 // routes.use("/email");
 // routes.use("/recuperar");
+// routes.use("/alterar_senha")
 
 export default routes;

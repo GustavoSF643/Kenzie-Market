@@ -1,17 +1,15 @@
 import { getRepository } from "typeorm";
 import Cart from "../../entities/Cart";
 import PurchaseProduct from "../../entities/PurchaseProduct";
-import Purchase from "../../entities/Purchases";
 import AppError from "../../errors/AppError";
 import CreatePurchaseService from "../Purchases/CreatePurchaseService";
 
 interface Request {
     userId: string;
-    // purchaseId: string;
 };
 
 export default class AddProductsOnPurchasesService {
-    public async execute({ userId }: Request): Promise<Purchase> {
+    public async execute({ userId }: Request): Promise<string> {
         const createPurchaseService = new CreatePurchaseService();
         const purchase = await createPurchaseService.execute({
             userId,
@@ -33,23 +31,22 @@ export default class AddProductsOnPurchasesService {
         };
         
         const purchaseProductRepository = getRepository(PurchaseProduct);
-
-        cart.products.forEach(async (cardProduct) => {
+        for (let i = 0; i < cart.products.length; i++) {
             const purchaseProduct = purchaseProductRepository.create({
                 purchase: {
                     id: purchase.id
                 },
                 product: {
-                    id: cardProduct.productId
+                    id: cart.products[i].productId
                 },
-                price: cardProduct.price,
+                price: cart.products[i].price,
             });
 
             await purchaseProductRepository.save(purchaseProduct);
-        });
+        }
+        
+        await cartRepository.delete(cart.id);
 
-        cartRepository.delete(cart.id);
-
-        return purchase;
+        return purchase.id;
     };
 };

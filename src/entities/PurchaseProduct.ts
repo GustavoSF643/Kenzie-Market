@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import Product from './Product';
 import Purchase from './Purchases';
+import User from './User';
 
 @Entity('purchase_products')
 class PurchaseProduct {
@@ -10,7 +11,7 @@ class PurchaseProduct {
     @ManyToOne(() => Purchase)
     purchase: Purchase;
 
-    @ManyToOne(() => Product)
+    @ManyToOne(() => Product, {eager:true})
     product: Product;
 
     @Column()
