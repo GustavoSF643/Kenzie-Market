@@ -28,10 +28,10 @@ export default class SendReportEmailService {
 
         transporter.use("compile", hbs({
             viewEngine: {
-                partialsDir: path.resolve(__dirname, "..", "..", "views"),
+                partialsDir: path.resolve(__dirname, "..", "..", "views", "Purchase"),
                 defaultLayout: undefined,
             },
-            viewPath: path.resolve(__dirname, "..", "..", "views")
+            viewPath: path.resolve(__dirname, "..", "..", "views", "Purchase")
         }));
 
         const mailOptions = {
