@@ -1,0 +1,15 @@
+<style>
+    .message-content { 
+        font-family: Arial, Helvetica, sans-serif; 
+        max-width: 600px;
+        font-size: 18px; 
+        line-height: 21px;
+    }
+</style>
+<div class="message-content">
+  <h2>Olá {{name}}</h2>
+  <p>Você requisitou por uma redefinição de senha</p>
+  <p>Por favor clique no link abaixo e use o código para redefinir sua senha</p>
+  <a href="{{api_link}}/alterar_senha">Reset Password</a>
+  <p>Token: {{token}}</p>
+</div>

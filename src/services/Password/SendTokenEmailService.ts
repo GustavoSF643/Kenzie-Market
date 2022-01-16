@@ -6,14 +6,14 @@ import { getCustomRepository } from "typeorm";
 import UserRepository from "../../repositories/UserRepository";
 
 interface Request {
-    userEmail: string;
-    message: string;
+    email: string;
+    token: string;
 };
 
-export default class SendEmailMessageService {
+export default class SendTokenEmailService {
     public async execute({
-        userEmail,
-        message,
+        token,
+        email,
     }: Request): Promise<void> {
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
@@ -26,36 +26,37 @@ export default class SendEmailMessageService {
 
         transporter.use("compile", hbs({
             viewEngine: {
-                partialsDir: path.resolve(__dirname, "..", "..", "views", "Email"),
+                partialsDir: path.resolve(__dirname, "..", "..", "views", "Password"),
                 defaultLayout: undefined,
             },
-            viewPath: path.resolve(__dirname, "..", "..", "views", "Email")
+            viewPath: path.resolve(__dirname, "..", "..", "views", "Password")
         }));
 
         const userRepository = getCustomRepository(UserRepository);
-        const user = await userRepository.findByEmail(userEmail);
+        const user = await userRepository.findByEmail(email);
 
         if (!user) {
-            throw new AppError("user not found.")
-        }
+            return 
+        };
 
         const mailOptions = {
             from: process.env.FROM_EMAIL,
-            to: userEmail,
-            subject: "Messagem para o usuário",
-            template: "message",
+            to: email,
+            subject: "Reset de senha.",
+            template: "token",
             context: {
                 name: user.name,
-                message,
+                token,
+                api_link: process.env.APP_API_URL,
             }
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
+                console.error(error);
                 throw new AppError("Error while sending the email", 500)
             };
 
-            console.error(error);
         })
     };
 };

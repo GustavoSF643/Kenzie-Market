@@ -18,11 +18,11 @@ export default class SendReportEmailService {
         purchase,
     }: Request): Promise<void> {
         const transporter = nodemailer.createTransport({
-            host: "smtp.mailtrap.io",
+            host: process.env.EMAIL_HOST,
             port: 2525,
             auth: {
-              user: "28cf994a06e651",
-              pass: "311d4f2026e8c2"
+              user: process.env.EMAIL_USERNAME,
+              pass: process.env.EMAIL_PASSWORD
             }
         });
 
@@ -35,7 +35,7 @@ export default class SendReportEmailService {
         }));
 
         const mailOptions = {
-            from: "entrega14@mail.com.br",
+            from: process.env.FROM_EMAIL,
             to: email,
             subject: "Relátorio de compras",
             template: "report",

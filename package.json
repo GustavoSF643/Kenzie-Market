@@ -9,6 +9,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcrypt-salt": "^1.1.10",
     "bcryptjs": "^2.4.3",
     "class-transformer": "0.3.1",
     "express": "^4.17.2",
@@ -22,6 +24,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.0",
