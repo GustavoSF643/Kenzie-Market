@@ -4,10 +4,18 @@ import "reflect-metadata";
 import connection from "./database";
 import routes from "./routes";
 import AppError from "./errors/AppError";
+import swaggerUiExpress from "swagger-ui-express";
+import swaggerDocument from "./swagger.json";
 
 connection();
 
 const app = express();
+
+app.use(
+  "/api-documentation",
+  swaggerUiExpress.serve,
+  swaggerUiExpress.setup(swaggerDocument)
+)
 
 app.use(express.json());
 app.use(routes);

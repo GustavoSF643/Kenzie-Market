@@ -1,0 +1,853 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Kenzie Market",
+      "description": "This is an api made to simulate a market",
+      "contact": {
+        "name": "API Support",
+        "url": "http://www.example.com/support",
+        "email": "support@example.com"
+      },
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/api-documentation",
+        "description": "test"
+      },
+      {
+        "url": "https://entrega14.herokuapp.com/api-documentation",
+        "description": "production"
+      }
+    ],
+    "paths": {
+        "/user": {
+            "post": {
+                "summary": "Criação de usuário.",
+                "description": "Rota responsável por cadastrar um novo usuário.",
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "Gustavo Silva",
+                                        "email": "teste@teste.com",
+                                        "password": "123456",
+                                        "isAdm": false
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "409": {
+                        "description": "E-mail already registered"
+                    },
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "user": {
+                                        "value": {
+                                            "name": "Gustavo Silva",
+                                            "email": "teste@teste.com",
+                                            "isAdm": false,
+                                            "id": "f655f7c6-d9b1-4189-845f-ff7d0dcaf9d3",
+                                            "created_at": "2022-01-15T01:17:15.894Z",
+                                            "updated_at": "2022-01-15T01:17:15.894Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Lista de usuários.",
+                "description": "Rota que retorna uma lista com as informações de todos os usuários cadastrados. Apenas os administradores podem fazer essa ação.",
+                "tags": ["Users"],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "users": {
+                                        "value": [
+                                            {
+                                                "id": "e9ff712f-5a97-4f7d-91a2-cb3159b8e6ef",
+                                                "name": "teste",
+                                                "email": "teste@teste.com",
+                                                "isAdm": false,
+                                                "created_at": "2022-01-13T22:10:55.103Z",
+                                                "updated_at": "2022-01-16T18:07:58.693Z"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "login.",
+                "description": "Rota de login do usuário.",
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/Login"
+                            },
+                            "examples": {
+                                "login": {
+                                    "value": {
+                                        "email":"teste@teste.com",
+                                        "password": "123456"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login": {
+                                        "value": {
+                                            "message": "Wrong email/password"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login": {
+                                        "value": {
+                                            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDIzNDU4ODYsImV4cCI6MTY0MjQzMjI4Niwic3ViIjoiMzIxNWYxOTAtNGVlZC00NTg4LTgyZTYtZTQ5ZmNlMDc1YzUyIn0.SINh42hVgGVD6ngo0GxAXYPLI6UAQfW3DvIqYZLtYsc"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }    
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "summary": "Informações do usuário.",
+                "description": "Rota que retorna informações do usuário pelo id. Usuários do tipo cliente são restritos as suas próprias informações, mas um administrador pode selecionar qualquer usuário do sistema.",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do usuário.",
+                        "required": true
+                    }
+                ],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "user": {
+                                        "value":{
+                                            "id": "e9ff712f-5a97-4f7d-91a2-cb3159b8e6ef",
+                                            "name": "Gustavo Silva",
+                                            "email": "teste@teste.com",
+                                            "isAdm": false,
+                                            "created_at": "2022-01-13T22:10:55.103Z",
+                                            "updated_at": "2022-01-16T18:07:58.693Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product": {
+            "post": {
+                "summary": "Criação de produto.",
+                "description": "Rota para cadastrar um produto. Apenas usuário do tipo administrador pode realizar essa ação.",
+                "tags": ["Products"],
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/Product"
+                            },
+                            "examples": {
+                                "product": {
+                                    "value": {
+                                        "name": "Refrigerante",
+                                        "description": "Refrigerante de laranja.",
+                                        "price": 6.50
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "product": {
+                                        "value": {
+                                            "name": "Refrigerante",
+                                            "price": "6.50",
+                                            "description": "Refrigerante de laranja.",
+                                            "id": "12615962-f737-4305-ac27-c9ead6ad06d4",
+                                            "created_at": "2022-01-17T16:35:10.978Z",
+                                            "updated_at": "2022-01-17T16:35:10.978Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Lista de produtos.",
+                "description": "Rota que retorna uma lista dos produtos cadastrados.",
+                "tags": ["Products"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "products": {
+                                        "value": [
+                                            {
+                                                "id": "12615962-f737-4305-ac27-c9ead6ad06d4",
+                                                "name": "Refrigerante",
+                                                "price": "6.50",
+                                                "description": "Refrigerante de laranja.",
+                                                "created_at": "2022-01-17T16:35:10.978Z",
+                                                "updated_at": "2022-01-17T16:35:10.978Z"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "summary": "Informações do produto.",
+                "description": "Rota que retorna as informações de um produto cadastrado pelo id.",
+                "tags": ["Products"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do produto.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "product": {
+                                        "value": {
+                                            "id": "12615962-f737-4305-ac27-c9ead6ad06d4",
+                                            "name": "Refrigerante",
+                                            "price": "6.50",
+                                            "description": "Refrigerante de laranja.",
+                                            "created_at": "2022-01-17T16:35:10.978Z",
+                                            "updated_at": "2022-01-17T16:35:10.978Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "post": {
+                "summary": "Adiciona um produto no carrinho.",
+                "description": "Rota que adiciona um produto no carrinho.",
+                "tags": ["Carts"],
+                "security": [{ "bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref":"#/components/schemas/Cart"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "cart": {
+                                        "value": {
+                                            "id": "1e271783-7ce6-4ca9-b272-36858005c179",
+                                            "userId": "f655f7c6-d9b1-4189-845f-ff7d0dcaf9d3",
+                                            "created_at": "2022-01-15T01:19:08.323Z",
+                                            "updated_at": "2022-01-15T01:19:08.323Z",
+                                            "products": [
+                                              {
+                                                "id": "09b668a3-aaba-47e9-8503-5dc46c19f771",
+                                                "cartId": "1e271783-7ce6-4ca9-b272-36858005c179",
+                                                "productId": "d49ec2f8-240e-4d93-a4d2-caeb26046fe6",
+                                                "price": "10.10",
+                                                "created_at": "2022-01-15T01:19:08.329Z",
+                                                "updated_at": "2022-01-15T01:19:08.329Z"
+                                              }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Lista de carrinhos",
+                "description": "Rota que retorna um lista de todos os carrinhos. Apenas os administradores podem realizar essa ação.",
+                "tags": ["Carts"],
+                "security": [{ "bearerAuth": []}],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "carts": {
+                                        "value": [
+                                            {
+                                              "id": "66e36d1c-2a83-4d8a-9c04-54733a5f3d22",
+                                              "userId": "e9ff712f-5a97-4f7d-91a2-cb3159b8e6ef",
+                                              "created_at": "2022-01-17T21:07:42.909Z",
+                                              "updated_at": "2022-01-17T21:07:42.909Z",
+                                              "products": [
+                                                {
+                                                  "id": "f14c671a-c313-4c51-9e71-c3464b08c330",
+                                                  "cartId": "66e36d1c-2a83-4d8a-9c04-54733a5f3d22",
+                                                  "productId": "d49ec2f8-240e-4d93-a4d2-caeb26046fe6",
+                                                  "price": "6.50",
+                                                  "created_at": "2022-01-17T21:07:42.938Z",
+                                                  "updated_at": "2022-01-17T21:07:42.938Z"
+                                                }
+                                              ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/{id}": {
+            "get": {
+                "summary": "Seleciona o carrinho do usuário",
+                "description": "Rota que retorna as informações do carrinho pelo id do usuário, um cliente não pode selecionar o carrinho de outro usuário, mas um administrador pode selecionar qualquer carrinho do sistema",
+                "tags": ["Carts"],
+                "security": [{ "bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do usuário.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "cart": {
+                                        "value": {
+                                            "id": "66e36d1c-2a83-4d8a-9c04-54733a5f3d22",
+                                            "userId": "e9ff712f-5a97-4f7d-91a2-cb3159b8e6ef",
+                                            "created_at": "2022-01-17T21:07:42.909Z",
+                                            "updated_at": "2022-01-17T21:07:42.909Z",
+                                            "products": [
+                                              {
+                                                "id": "f14c671a-c313-4c51-9e71-c3464b08c330",
+                                                "cartId": "66e36d1c-2a83-4d8a-9c04-54733a5f3d22",
+                                                "productId": "d49ec2f8-240e-4d93-a4d2-caeb26046fe6",
+                                                "price": "6.50",
+                                                "created_at": "2022-01-17T21:07:42.938Z",
+                                                "updated_at": "2022-01-17T21:07:42.938Z"
+                                              }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/{productId}": {
+            "delete": {
+                "summary": "Deleta um produto do carrinho.",
+                "description": "Rota que remove um produto no carrinho. Apenas o usuário dono do carrinho e o administrador pode realizar essa ação.",
+                "tags": ["Carts"],
+                "security": [{ "bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do produto.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/buy": {
+            "post": {
+                "summary": "Realiza compra dos produtos do carrinho.",
+                "description": "Rota que finaliza as compras do carrinho. Apenas o dono do carrinho pode finalizar uma compra e após a sua finalização um email com os dados da compra é disparado para o usuário.",
+                "tags": ["Purchases"],
+                "security": [{ "bearerAuth": []}],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "message": "User cart not found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "buy": {
+                                        "value": {
+                                            "message": "Purchase completed."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Seleciona todas as compras já realizada.",
+                "description": "Rota que lista todas as compra já realizadas. Apenas o administrador pode realizar essa ação.",
+                "tags": ["Purchases"],
+                "security": [{ "bearerAuth": []}],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "buy": {
+                                        "value": [
+                                            {
+                                              "id": "dbb6f114-6da3-42b8-90e9-8a0e8bbabcaf",
+                                              "userId": "e9ff712f-5a97-4f7d-91a2-cb3159b8e6ef",
+                                              "created_at": "2022-01-14T00:07:56.483Z",
+                                              "updated_at": "2022-01-14T00:07:56.483Z",
+                                              "products": [
+                                                {
+                                                  "id": "bf738db2-eb93-45cd-88be-dddf45e6e1c0",
+                                                  "purchaseId": "dbb6f114-6da3-42b8-90e9-8a0e8bbabcaf",
+                                                  "productId": "d49ec2f8-240e-4d93-a4d2-caeb26046fe6",
+                                                  "price": "6.50",
+                                                  "created_at": "2022-01-14T00:07:56.572Z",
+                                                  "updated_at": "2022-01-14T00:07:56.572Z"
+                                                }
+                                              ],
+                                              "subtotal": 6.5
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/buy/{id}": {
+            "get": {
+                "summary": "Seleciona uma compra já realizada.",
+                "description": "Rota que retornas as informações de uma compra já realizada. Apenas o usuário dono da compra e o administrador pode realizar essa ação.",
+                "tags": ["Purchases"],
+                "security": [{ "bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do usuário.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "buy": {
+                                        "value": {
+                                            "id": "dbb6f114-6da3-42b8-90e9-8a0e8bbabcaf",
+                                            "userId": "e9ff712f-5a97-4f7d-91a2-cb3159b8e6ef",
+                                            "created_at": "2022-01-14T00:07:56.483Z",
+                                            "updated_at": "2022-01-14T00:07:56.483Z",
+                                            "products": [
+                                              {
+                                                "id": "bf738db2-eb93-45cd-88be-dddf45e6e1c0",
+                                                "purchaseId": "dbb6f114-6da3-42b8-90e9-8a0e8bbabcaf",
+                                                "productId": "d49ec2f8-240e-4d93-a4d2-caeb26046fe6",
+                                                "price": "6.50",
+                                                "created_at": "2022-01-14T00:07:56.572Z",
+                                                "updated_at": "2022-01-14T00:07:56.572Z"
+                                              }
+                                            ],
+                                            "subtotal": 6.5
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/email": {
+            "post": {
+                "summary": "Envia um email qualquer para um determinado usuário.",
+                "description": "Rota para caso o administrador queira mandar alguma mensagem para um usuário qualquer. Apenas o administrador pode realizar essa ação.",
+                "tags": ["Email"],
+                "security": [{ "bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref":"#/components/schemas/Email"
+                            },
+                            "examples": {
+                                "email": {
+                                    "value": {
+                                        "userEmail": "teste@teste.com",
+                                        "message": "Mensagem de teste."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "email": {
+                                        "value": {
+                                            "message": "Email sendded."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/recuperar": {
+            "post": {
+                "summary": "Envia um código de validação para o email do usuário.",
+                "description": "Rota que envia um código de validação para o email do usuário.",
+                "tags": ["Password"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref":"#/components/schemas/Recuperar"
+                            },
+                            "examples": {
+                                "recuperar": {
+                                    "value": {
+                                        "email": "teste@teste.com"
+                                    }		
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "recuperar": {
+                                        "value": {
+                                            "message": "Token sendded to your email."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/alterar_senha": {
+            "post": {
+                "summary": "Altera a senha do usuário.",
+                "description": "Rota que altera a senha do usuário a partir do código validador que o usuário recebe em seu email.",
+                "tags": ["Password"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/AlterarSenha"
+                            },
+                            "examples": {
+                                "AlterarSenha": {
+                                    "value": {
+                                        "token": "$2b$08$H67yfHLWdnaPpK7XwTXzluQpQgqR8VyQ8dEJERB9OgSDRbdisbe6.",
+                                        "password": "12345",
+                                        "confirmation": "12345"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "AlterarSenha": {
+                                        "value": {
+                                            "message": "Password updated."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "isAdm": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Product": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Cart": {
+                "type":"object",
+                "properties": {
+                    "productId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Email": {
+                "type": "object",
+                "properties": {
+                    "userEmail": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Recuperar": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AlterarSenha": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "confirmation": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
