@@ -12,11 +12,11 @@
     },
     "servers": [
       {
-        "url": "http://localhost:3000/api-documentation",
+        "url": "http://localhost:3000",
         "description": "test"
       },
       {
-        "url": "https://kenzie-market.herokuapp.com/api-documentation",
+        "url": "https://kenzie-market.herokuapp.com",
         "description": "production"
       }
     ],
