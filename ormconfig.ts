@@ -24,5 +24,17 @@ const productionEnv = {
       : false,
 };
 
-module.exports =
-  process.env.NODE_ENV === "production" ? productionEnv : developmentEnv;
+const testEnv = {
+  type: "postgres",
+  url: process.env.TEST_DATABASE_URL,
+  entities: ["./src/entities/*.ts"],
+  migrations: ["./src/database/migrations/*.ts"],
+  cli: {
+    migrationsDir: "./src/database/migrations",
+  },
+  ssl: false,
+}
+
+if (process.env.NODE_ENV === "test") module.exports = testEnv
+if (process.env.NODE_ENV === "production") module.exports = productionEnv
+if (process.env.NODE_ENV === "development") module.exports = developmentEnv

@@ -1,6 +1,5 @@
-import { getCustomRepository, getRepository } from "typeorm";
+import { getCustomRepository } from "typeorm";
 import UserRepository from "../../repositories/UserRepository";
-import Token from "../../entities/Token";
 import { hash } from "bcrypt";
 import AppError from "../../errors/AppError";
 import User from "../../entities/User";
@@ -33,7 +32,7 @@ export default class UpdatePasswordService {
         };
 
         const hashedPassword = await hash(password, 8);
-        
+    
         hashedPassword ? (user.password = hashedPassword) : user.password;
 
         await userRepository.save(user);
